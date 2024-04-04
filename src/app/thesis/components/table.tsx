@@ -8,8 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PublicationDatabase } from "@/schema/thesis";
-import { NotionPage } from "../page";
 
 export interface ThesisEntry {
   title: string;

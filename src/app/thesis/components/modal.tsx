@@ -12,9 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FormEvent } from "react";
-import { create } from "@/action";
-import { revalidatePath } from "next/cache";
 
 export function ThesisDialog() {
   //   async function onSubmit(formData: FormData) {

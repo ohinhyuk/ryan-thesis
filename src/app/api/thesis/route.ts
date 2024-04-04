@@ -4,7 +4,7 @@ import { promisify } from "util";
 // exec 함수를 Promise로 사용하기 위해 promisify로 감싸줍니다.
 const exec = promisify(execCallback);
 
-export async function POST(request) {
+export async function POST(request: any) {
   const bibtex = `"""@article{10.1145/3503250,
   author = {Mildenhall, Ben and Srinivasan, Pratul P. and Tancik, Matthew and Barron, Jonathan T. and Ramamoorthi, Ravi and Ng, Ren},
   title = {NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis},
@@ -67,7 +67,7 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error(`exec error: ${error}`);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ message: "error" }), {
       status: 500,
       headers: {
         "Content-Type": "application/json",
