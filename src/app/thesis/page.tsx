@@ -36,7 +36,7 @@ export interface NotionPage {
 export default async function page() {
   const thesis = await getThesis();
 
-  const data = thesis.results.map((row: NotionPage) => ({
+  const data = thesis.results.reverse().map((row: NotionPage) => ({
     title: row.properties.Title.title[0].text.content,
     summary: row.properties.Summary.formula.string,
     year: row.properties.Year.number,

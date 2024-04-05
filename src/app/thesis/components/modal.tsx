@@ -12,41 +12,27 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 export function ThesisDialog() {
-  //   async function onSubmit(formData: FormData) {
-  //     "use server";
-  //     // event.preventDefault();
+  const [content, setContent] = useState("");
+  const [password, setPassword] = useState("");
+  const postThesis = async () => {
+    const res = await (
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/thesis`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content,
+          password,
+        }),
+      })
+    ).json();
 
-  //     console.log("22");
-
-  //     // const formData = new FormData(event.currentTarget);
-  //     console.log(formData.get("content"));
-
-  //     if (formData.get("password") !== "ryan") {
-  //       return;
-  //     }
-
-  //     console.log(formData.get("content"), formData.get("password"));
-  //     // const response = await fetch("/api/submit", {
-  //     //   method: "POST",
-  //     //   body: formData,
-  //     // });
-
-  //     console.log("@@");
-  //     revalidatePath("/thesis", "page");
-
-  //     // Handle response if necessary
-  //     // const data = await response.json();
-  //     // ...
-  //   }
-
-  const postThesis = () =>
-    fetch("http://localhost:3000/api/thesis", {
-      method: "POST",
-    })
-      .then((res) => alert("생성되었습니다."))
-      .catch((e) => alert("실패하였습니다."));
+    alert(res.message);
+  };
 
   return (
     <Dialog>
@@ -60,20 +46,34 @@ export function ThesisDialog() {
             논문에 추가할 내용을 입력해주세요.
           </DialogDescription>
         </DialogHeader>
-        <form>
-          <div className="grid gap-4 py-4">
-            <Textarea name="content" placeholder="내용 추가" rows={15} />
-          </div>
-          <Label htmlFor="password">비밀번호</Label>
-          <Input
-            id="password"
-            name="password"
-            placeholder="당신의 영어 이름 (소문자로)"
-          />
-          <DialogFooter>
-            <Button onClick={postThesis}>저장</Button>
-          </DialogFooter>
-        </form>
+
+        <Label htmlFor="content">내용</Label>
+        <Textarea
+          value={content}
+          onChange={(e) => setContent(e.currentTarget.value)}
+          name="content"
+          placeholder="예시) 
+          @InProceedings{Armeni_2019_ICCV,
+            author = {Armeni, Iro and He, Zhi-Yang and Gwak, JunYoung and Zamir, Amir R. and Fischer, Martin and Malik, Jitendra and Savarese, Silvio},
+            title = {3D Scene Graph: A Structure for Unified Semantics, 3D Space, and Camera},
+            booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+            month = {October},
+            year = {2019}
+          }"
+          rows={15}
+        />
+        <Label htmlFor="password">비밀번호</Label>
+        <Input
+          value={password}
+          onChange={(e) => setPassword(e.currentTarget.value)}
+          id="password"
+          name="password"
+          placeholder="당신의 영어 이름 (소문자로)"
+        />
+
+        <DialogFooter>
+          <Button onClick={postThesis}>저장</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
