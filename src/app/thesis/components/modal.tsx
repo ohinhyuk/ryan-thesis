@@ -19,7 +19,7 @@ export function ThesisDialog() {
   const [password, setPassword] = useState("");
   const postThesis = async () => {
     const res = await (
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/thesis`, {
+      await fetch(`/api/thesis`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
