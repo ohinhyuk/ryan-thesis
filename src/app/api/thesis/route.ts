@@ -1,4 +1,5 @@
 import { exec as execCallback } from "child_process";
+import Error from "next/error";
 import { promisify } from "util";
 
 // exec 함수를 Promise로 사용하기 위해 promisify로 감싸줍니다.
@@ -68,8 +69,7 @@ export async function POST(request: Request) {
       }
     );
   } catch (error) {
-    console.error(`exec error: ${error}`);
-    return new Response(JSON.stringify({ message: "error" }), {
+    return new Response(JSON.stringify({ message: error }), {
       status: 500,
       headers: {
         "Content-Type": "application/json",
