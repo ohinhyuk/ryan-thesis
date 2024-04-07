@@ -37,35 +37,86 @@ export async function POST(request: Request) {
   const token = process.env.NOTION_API_SECRET_KEY;
   const databaseId = process.env.DATABASE_ID;
   // console.log(token, databaseId);
+  const { PythonShell } = require("python-shell");
+
   try {
+    // // notion-scholar 설치
+    // const installOutput = await exec(
+    //   "pip install git+https://github.com/thomashirtz/notion-scholar#egg=notion-scholar"
+    // );
+    // console.log(installOutput.stdout);
+
+    // // ns set-config 실행
+    // const configOutput = await exec(
+    //   `ns set-config -t ${token} -db ${databaseId}`
+    // );
+    // console.log(configOutput.stdout);
+
+    // // ns run 실행
+    // const runOutput = await exec(`ns run -s "${content}"`);
+
+    // console.log(runOutput.stdout.length);
+    // const message =
+    //   runOutput.stdout.length === 0
+    //     ? "입력 형식이 잘못 되었습니다."
+    //     : runOutput.stdout;
+    // return new Response(
+    //   JSON.stringify({
+    //     message,
+    //   }),
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
+
     // notion-scholar 설치
-    const installOutput = await exec(
-      "pip install git+https://github.com/thomashirtz/notion-scholar#egg=notion-scholar"
-    );
-    console.log(installOutput.stdout);
+    PythonShell.run(
+      "pip",
+      [
+        "install",
+        "git+https://github.com/thomashirtz/notion-scholar#egg=notion-scholar",
+      ],
+      function (err: any, installOutput: any) {
+        if (err) throw err;
+        console.log("notion-scholar 설치 결과:", installOutput);
 
-    // ns set-config 실행
-    const configOutput = await exec(
-      `ns set-config -t ${token} -db ${databaseId}`
-    );
-    console.log(configOutput.stdout);
+        // ns set-config 실행
+        PythonShell.run(
+          "ns",
+          ["set-config", "-t", token, "-db", databaseId],
+          function (err: any, configOutput: any) {
+            if (err) throw err;
+            console.log("ns set-config 실행 결과:", configOutput);
 
-    // ns run 실행
-    const runOutput = await exec(`ns run -s "${content}"`);
+            // ns run 실행
+            PythonShell.run(
+              "ns",
+              ["run", "-s", content],
+              function (err: any, runOutput: string | any[]) {
+                if (err) throw err;
+                console.log("ns run 실행 결과:", runOutput);
+                console.log("결과 길이:", runOutput.length);
 
-    console.log(runOutput.stdout.length);
-    const message =
-      runOutput.stdout.length === 0
-        ? "입력 형식이 잘못 되었습니다."
-        : runOutput.stdout;
-    return new Response(
-      JSON.stringify({
-        message,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+                const message =
+                  runOutput.length === 0
+                    ? "입력 형식이 잘못 되었습니다."
+                    : runOutput;
+                return new Response(
+                  JSON.stringify({
+                    message,
+                  }),
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+              }
+            );
+          }
+        );
       }
     );
   } catch (error) {
