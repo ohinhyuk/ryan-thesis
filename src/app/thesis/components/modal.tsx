@@ -13,8 +13,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function ThesisDialog() {
+  const router = useRouter();
   const [content, setContent] = useState("");
   const [password, setPassword] = useState("");
   const postThesis = async () => {
@@ -31,7 +33,11 @@ export function ThesisDialog() {
       })
     ).json();
 
+    // console.log(res);
+
     alert(res.message);
+
+    if (res.message === "생성되었습니다.") window.location.reload();
   };
 
   return (
